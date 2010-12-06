@@ -3,11 +3,15 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       xmlns:axon="http://www.axonframework.org/schema/core"
+       xsi:schemaLocation="
+       http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core-1.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+		">
 
-    <context:component-scan base-package="nl.gridshore.companyhr.web"/>
+    <context:component-scan base-package="nl.gridshore.companyhr"/>
 
     <mvc:annotation-driven/>
 
@@ -18,5 +22,20 @@
         <property name="prefix" value="/WEB-INF/views/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+
+
+    <!-- Axon things -->
+    <axon:annotation-config/>
+    <axon:event-bus id="eventBus"/>
+    <axon:command-bus id="commandBus"/>
+
+    <axon:event-sourcing-repository id="projectRepository" aggregate-type="nl.gridshore.companyhr.app.project.Project"/>
+
+    <!--<axon:jpa-event-store id="eventStore"/>-->
+    <bean id="eventStore" class="nl.gridshore.companyhr.app.axon.ObjectifyEventStore">
+        <constructor-arg index="0" ref="objectifyFactory"/>
+    </bean>
+
+    <bean id="objectifyFactory" class="com.googlecode.objectify.ObjectifyFactory"/>
 
 </beans>

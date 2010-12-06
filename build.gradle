@@ -1,15 +1,19 @@
 // https://github.com/pniederw/spockwebconsole
 apply plugin: 'java'
+//apply plugin: 'jetty'
 apply plugin: 'idea'
 apply plugin: 'war'
 
 group = "nl.gridshore.companyhr"
 version = "0.1-SNAPSHOT"
 
-sourceCompatibility = 1.6 
+sourceCompatibility = 1.6
 targetCompatibility = 1.6
+
 gaeVersion = "1.4.0"
 springVersion = "3.0.5.RELEASE"
+axonVersion = "0.7-SNAPSHOT"
+slf4jVersion = "1.5.8"
 
 def explodedWar = file("$buildDir/exploded")
 
@@ -18,52 +22,79 @@ ideaModule {
 }
 
 repositories {
-  flatDir (dirs:  "$gaeHome/lib/user")
-  mavenCentral()
+    flatDir(dirs: "$gaeHome/lib/")
+    mavenCentral()
+    mavenRepo urls: ["http://oss.sonatype.org/content/groups/public",
+                     "http://objectify-appengine.googlecode.com/svn/maven"]
 }
 
 dependencies {
     // spring dependencies
-	compile "org.springframework:spring-core:$springVersion",
-            "org.springframework:spring-webmvc:$springVersion"
+    compile "org.springframework:spring-core:$springVersion",
+            "org.springframework:spring-webmvc:$springVersion",
+            "org.springframework:spring-tx:$springVersion",
+            "org.springframework:spring-aop:$springVersion",
+            "org.springframework:spring-aspects:$springVersion",
+            "org.aspectj:aspectjrt:1.6.8",
+            "org.aspectj:aspectjweaver:1.6.8",
+            "org.axonframework:axon-core:$axonVersion",
+            "com.googlecode.objectify:objectify:2.2.2",
+            "javax.persistence:persistence-api:1.0"
 
     // web technologies
     compile "javax.servlet:jstl:1.1.2",
             "javax.servlet:servlet-api:2.5",
             "taglibs:standard:1.1.2"
 
-  // from Maven repos
-  testCompile "junit:junit:4.8.1"
-  
-  // from lib folder
-  compile ":appengine-api-1.0-sdk:$gaeVersion"
-  compile ":appengine-api-labs:$gaeVersion"
-  providedCompile "javax.servlet:servlet-api:2.5"
+    // logging
+    compile "org.slf4j:jcl-over-slf4j:$slf4jVersion",
+            "org.slf4j:jul-to-slf4j:$slf4jVersion"
+    runtime "org.slf4j:slf4j-log4j12:$slf4jVersion"
+
+    compile("log4j:log4j:1.2.15") {
+        exclude group: "com.sun.jdmk", module: "jmxtools"
+        exclude group: "com.sun.jmx", module: "jmxri"
+        exclude group: "javax.mail", module: "mail"
+        exclude group: "javax.jms", module: "jms"
+    }
+
+
+    // from lib folder
+    compile ":user/appengine-api-1.0-sdk:$gaeVersion",
+            ":user/appengine-api-labs:$gaeVersion"
+
+
+    providedCompile "javax.servlet:servlet-api:2.5"
+
+    // testing
+    testCompile "junit:junit:4.8.1"
+    testCompile "org.axonframework:axon-test:$axonVersion"
+
 }
 
 war.doLast {
-  // create exploded WAR directory
-  ant.unzip src: war.archivePath, dest: explodedWar
+    // create exploded WAR directory
+    ant.unzip src: war.archivePath, dest: explodedWar
 }
 
 task jettyStart(description: "Starts the development application server") << {
-  exec "dev_appserver.sh $explodedWar.absolutePath"
+    exec "dev_appserver.sh $explodedWar.absolutePath"
 }
 
 task jettyStop(description: "Stops the development application server") << {
-  // for some reason, exec'ing this has no effect (although there's no error message)
-  println '''
+    // for some reason, exec'ing this has no effect (although there's no error message)
+    println '''
 Run the following command:
 ps ww -o pid,command | awk '/com.google.appengine.tools.development.DevAppServerMain/ && !/awk/ {system("kill " $1);}'
-  ''' 
+  '''
 }
 
 task deploy(dependsOn: war, description: "Deploys application to Google App Engine") << {
-  exec "appcfg.sh update $explodedWar.absolutePath"
+    exec "appcfg.sh update $explodedWar.absolutePath"
 }
 
 def exec(command) {
-  println "Executing: $command"
-  def proc = command.execute()
+    println "Executing: $command"
+    def proc = command.execute()
 }
 
