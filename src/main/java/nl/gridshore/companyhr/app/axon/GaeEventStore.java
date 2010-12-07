@@ -36,7 +36,7 @@ public class GaeEventStore implements SnapshotEventStore, EventStoreManagement {
         while (events.hasNext()) {
             DomainEvent event = events.next();
             EventEntry entry = new EventEntry(type, event, eventSerializer);
-            entries.add(entry.obtainEntity());
+            entries.add(entry.asEntity());
         }
         Transaction transaction = datastoreService.beginTransaction();
         try {
@@ -92,7 +92,7 @@ public class GaeEventStore implements SnapshotEventStore, EventStoreManagement {
         Transaction transaction = datastoreService.beginTransaction();
 
         try {
-            datastoreService.put(transaction, snapshotEventEntry.obtainEntity());
+            datastoreService.put(transaction, snapshotEventEntry.asEntity());
             transaction.commit();
         } finally {
             if (transaction.isActive()) {
@@ -109,10 +109,7 @@ public class GaeEventStore implements SnapshotEventStore, EventStoreManagement {
     private List<DomainEvent> readEventSegmentInternal(String type, AggregateIdentifier identifier,
                                                        long firstSequenceNumber) {
         Transaction transaction = datastoreService.beginTransaction();
-        Query query = new Query(type)
-                .addFilter("aggregateIdentifier", Query.FilterOperator.EQUAL, identifier.asString())
-                .addFilter("sequenceNumber", Query.FilterOperator.GREATER_THAN, firstSequenceNumber)
-                .addSort("sequenceNumber", Query.SortDirection.ASCENDING);
+        Query query = EventEntry.forAggregate(type,identifier.asString(),firstSequenceNumber);
         PreparedQuery preparedQuery = datastoreService.prepare(transaction, query);
         List<Entity> entities = preparedQuery.asList(FetchOptions.Builder.withDefaults());
         transaction.commit(); // TODO jettro, do we really want this?
