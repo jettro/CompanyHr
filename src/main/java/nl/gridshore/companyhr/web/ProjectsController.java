@@ -1,9 +1,11 @@
 package nl.gridshore.companyhr.web;
 
 import nl.gridshore.companyhr.app.api.project.CreateProjectCommand;
+import nl.gridshore.companyhr.query.ProjectEntryProvider;
 import org.axonframework.commandhandling.CommandBus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,14 +18,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ProjectsController {
 
     private CommandBus commandBus;
+    private ProjectEntryProvider projectEntryProvider;
 
     @Autowired
-    public ProjectsController(CommandBus commandBus) {
+    public ProjectsController(CommandBus commandBus, ProjectEntryProvider projectEntryProvider) {
         this.commandBus = commandBus;
+        this.projectEntryProvider = projectEntryProvider;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String list() {
+    public String list(ModelMap modelMap) {
+        modelMap.addAttribute("projects",projectEntryProvider.listAllProjects());
+
         return "project/list";
     }
 
