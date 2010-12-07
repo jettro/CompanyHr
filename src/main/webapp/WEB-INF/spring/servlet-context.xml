@@ -32,10 +32,6 @@
     <axon:event-sourcing-repository id="projectRepository" aggregate-type="nl.gridshore.companyhr.app.project.Project"/>
 
     <!--<axon:jpa-event-store id="eventStore"/>-->
-    <bean id="eventStore" class="nl.gridshore.companyhr.app.axon.ObjectifyEventStore">
-        <constructor-arg index="0" ref="objectifyFactory"/>
-    </bean>
-
-    <bean id="objectifyFactory" class="com.googlecode.objectify.ObjectifyFactory"/>
+    <bean id="eventStore" class="nl.gridshore.companyhr.app.axon.GaeEventStore"/>
 
 </beans>

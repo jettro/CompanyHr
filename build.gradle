@@ -37,9 +37,7 @@ dependencies {
             "org.springframework:spring-aspects:$springVersion",
             "org.aspectj:aspectjrt:1.6.8",
             "org.aspectj:aspectjweaver:1.6.8",
-            "org.axonframework:axon-core:$axonVersion",
-            "com.googlecode.objectify:objectify:2.2.2",
-            "javax.persistence:persistence-api:1.0"
+            "org.axonframework:axon-core:$axonVersion"
 
     // web technologies
     compile "javax.servlet:jstl:1.1.2",

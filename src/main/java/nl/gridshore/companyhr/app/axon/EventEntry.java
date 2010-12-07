@@ -1,5 +1,9 @@
 package nl.gridshore.companyhr.app.axon;
 
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Text;
 import org.axonframework.domain.AggregateIdentifier;
 import org.axonframework.domain.DomainEvent;
 import org.axonframework.domain.StringAggregateIdentifier;
@@ -12,7 +16,8 @@ import java.nio.charset.Charset;
  * @author Jettro Coenradie
  */
 public class EventEntry {
-    private @Id String aggregateIdentifier;
+    private String eventIdentifier;
+    private String aggregateIdentifier;
     private long sequenceNumber;
     private String timeStamp;
     private String aggregateType;
@@ -23,10 +28,6 @@ public class EventEntry {
      */
     protected static final Charset UTF8 = Charset.forName("UTF-8");
 
-    private EventEntry() {
-        //Required by Objectify
-    }
-
     /**
      * Constructor used to create a new event entry to store in Mongo
      *
@@ -35,6 +36,7 @@ public class EventEntry {
      * @param eventSerializer Serializer to use for the event to store
      */
     EventEntry(String aggregateType, DomainEvent event, EventSerializer eventSerializer) {
+        this.eventIdentifier = event.getEventIdentifier().toString();
         this.aggregateType = aggregateType;
         this.aggregateIdentifier = event.getAggregateIdentifier().asString();
         this.sequenceNumber = event.getSequenceNumber();
@@ -80,5 +82,16 @@ public class EventEntry {
 
     public String getTimeStamp() {
         return timeStamp;
+    }
+
+    Entity obtainEntity() {
+        Key key = KeyFactory.createKey(aggregateType, eventIdentifier);
+        Entity entity = new Entity(key);
+        entity.setProperty("aggregateIdentifier",aggregateIdentifier);
+        entity.setProperty("sequenceNumber", sequenceNumber);
+        entity.setProperty("timeStamp", timeStamp);
+        entity.setProperty("serializedEvent", new Text(serializedEvent));
+
+        return entity;
     }
 }
