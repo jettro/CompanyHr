@@ -18,8 +18,20 @@ public class ProjectEntry {
         this.name = name;
     }
 
-    private ProjectEntry() {
-        // required by objectify
+    public ProjectEntry() {
+        // required by objectify and spring forms
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getId() {
