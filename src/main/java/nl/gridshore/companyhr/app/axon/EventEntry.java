@@ -103,7 +103,7 @@ public class EventEntry {
     static Query forAggregate(String type, String aggregateIdentifier, long firstSequenceNumber) {
         return new Query(type)
                 .addFilter("aggregateIdentifier", Query.FilterOperator.EQUAL, aggregateIdentifier)
-                .addFilter("sequenceNumber", Query.FilterOperator.GREATER_THAN, firstSequenceNumber)
+                .addFilter("sequenceNumber", Query.FilterOperator.GREATER_THAN_OR_EQUAL, firstSequenceNumber)
                 .addSort("sequenceNumber", Query.SortDirection.ASCENDING);
 
     }

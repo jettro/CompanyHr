@@ -108,11 +108,9 @@ public class GaeEventStore implements SnapshotEventStore, EventStoreManagement {
 
     private List<DomainEvent> readEventSegmentInternal(String type, AggregateIdentifier identifier,
                                                        long firstSequenceNumber) {
-        Transaction transaction = datastoreService.beginTransaction();
         Query query = EventEntry.forAggregate(type,identifier.asString(),firstSequenceNumber);
-        PreparedQuery preparedQuery = datastoreService.prepare(transaction, query);
+        PreparedQuery preparedQuery = datastoreService.prepare(query);
         List<Entity> entities = preparedQuery.asList(FetchOptions.Builder.withDefaults());
-        transaction.commit(); // TODO jettro, do we really want this?
 
         List<DomainEvent> events = new ArrayList<DomainEvent>(entities.size());
         for (Entity entity : entities) {
