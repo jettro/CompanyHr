@@ -1,6 +1,5 @@
 // https://github.com/pniederw/spockwebconsole
 apply plugin: 'java'
-//apply plugin: 'jetty'
 apply plugin: 'idea'
 apply plugin: 'war'
 
@@ -24,7 +23,8 @@ ideaModule {
 repositories {
     flatDir(dirs: "$gaeHome/lib/")
     mavenCentral()
-    mavenRepo urls: ["http://oss.sonatype.org/content/groups/public",
+    mavenRepo urls: ["file://" + System.getProperty('user.home') + "/.m2/repository/",
+                     "http://oss.sonatype.org/content/groups/public",
                      "http://objectify-appengine.googlecode.com/svn/maven"]
 }
 

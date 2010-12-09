@@ -26,10 +26,15 @@
 
     <!-- Axon things -->
     <axon:annotation-config/>
-    <axon:event-bus id="eventBus"/>
-    <axon:command-bus id="commandBus"/>
+    <axon:event-bus id="eventBus" register-mbeans="false"/>
+    <axon:command-bus id="commandBus" register-mbeans="false"/>
     <axon:event-sourcing-repository id="projectRepository" aggregate-type="nl.gridshore.companyhr.app.project.Project"/>
-    <bean id="eventStore" class="nl.gridshore.companyhr.app.axon.GaeEventStore"/>
+
+    <bean id="eventStore" class="nl.gridshore.companyhr.app.axon.GaeEventStore">
+        <constructor-arg index="0" ref="gaeXStreamSerializer"/>
+    </bean>
+
+    <bean name="gaeXStreamSerializer" class="nl.gridshore.companyhr.axongeahacks.GaeXStreamEventSerializer"/>
 
     <!-- Objectify -->
     <bean id="objectifyFactoryFactory" class="nl.gridshore.companyhr.query.ObjectifyFactoryFactory">
