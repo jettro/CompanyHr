@@ -2,21 +2,14 @@ package nl.gridshore.companyhr.axongeahacks;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.SingleValueConverter;
 import com.thoughtworks.xstream.converters.basic.*;
 import com.thoughtworks.xstream.converters.collections.*;
 import com.thoughtworks.xstream.converters.enums.EnumConverter;
-import com.thoughtworks.xstream.converters.enums.EnumMapConverter;
-import com.thoughtworks.xstream.converters.enums.EnumSetConverter;
 import com.thoughtworks.xstream.converters.extended.*;
 import com.thoughtworks.xstream.converters.reflection.*;
-import com.thoughtworks.xstream.core.JVM;
 import com.thoughtworks.xstream.core.util.ClassLoaderReference;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 import com.thoughtworks.xstream.mapper.Mapper;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import java.lang.reflect.Constructor;
 
 /**
  * @author Jettro Coenradie
@@ -67,7 +60,6 @@ public class GaeXStream extends XStream {
         registerConverter(new MapConverter(mapper), PRIORITY_NORMAL);
         registerConverter(new TreeMapConverter(mapper), PRIORITY_NORMAL);
         registerConverter(new TreeSetConverter(mapper), PRIORITY_NORMAL);
-//        registerConverter(new PropertiesConverter(), PRIORITY_NORMAL);
         registerConverter(new EncodedByteArrayConverter(), PRIORITY_NORMAL);
 
         registerConverter(new FileConverter(), PRIORITY_NORMAL);
@@ -80,17 +72,9 @@ public class GaeXStream extends XStream {
 
         registerConverter(new UUIDConverter(), PRIORITY_NORMAL);
 //        registerConverter(new StringBuilderConverter(), PRIORITY_NORMAL);
-//        registerConverter(new EnumConverter(), PRIORITY_NORMAL);
+        registerConverter(new EnumConverter(), PRIORITY_NORMAL);
 //        registerConverter(new EnumSetConverter(getMapper()), PRIORITY_NORMAL);
 //        registerConverter(new EnumMapConverter(getMapper()), PRIORITY_NORMAL);
-
-
-//        try {
-//            registerConverter(new DurationConverter(), PRIORITY_NORMAL);
-//        } catch (DatatypeConfigurationException e) {
-//            throw new InitializationException("Could not instantiate converter ", e);
-//        }
-
         registerConverter(new SelfStreamingInstanceChecker(reflectionConverter, this), PRIORITY_NORMAL);
 
     }
