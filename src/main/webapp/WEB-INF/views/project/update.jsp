@@ -1,5 +1,10 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<html>
+<head>
+    <title>Change project</title>
+</head>
+<body>
 <spring:form method="POST" commandName="projectEntry" action="/project/update">
     <spring:hidden path="id"/>
     <spring:hidden path="identifier"/>
@@ -17,3 +22,5 @@
         </tr>
     </table>
 </spring:form>
+</body>
+</html>

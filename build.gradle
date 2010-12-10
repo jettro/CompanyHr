@@ -39,7 +39,8 @@ dependencies {
             "org.aspectj:aspectjweaver:1.6.8",
             "org.axonframework:axon-core:$axonVersion",
             "com.googlecode.objectify:objectify:2.2.2",
-            "javax.persistence:persistence-api:1.0"
+            "javax.persistence:persistence-api:1.0",
+            "opensymphony:sitemesh:2.4.2"
 
     // web technologies
     compile "javax.servlet:jstl:1.1.2",
