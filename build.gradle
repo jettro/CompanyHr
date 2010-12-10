@@ -11,13 +11,14 @@ targetCompatibility = 1.6
 
 gaeVersion = "1.4.0"
 springVersion = "3.0.5.RELEASE"
+springSecurityVersion = "3.0.5.RELEASE"
 axonVersion = "0.7-SNAPSHOT"
 slf4jVersion = "1.5.8"
 
 def explodedWar = file("$buildDir/exploded")
 
 ideaModule {
-    javaVersion = "1.6"
+    javaVersion = 1.6
 }
 
 repositories {
@@ -35,6 +36,9 @@ dependencies {
             "org.springframework:spring-tx:$springVersion",
             "org.springframework:spring-aop:$springVersion",
             "org.springframework:spring-aspects:$springVersion",
+            "org.springframework.security:spring-security-config:$springSecurityVersion",
+            "org.springframework.security:spring-security-core:$springSecurityVersion",
+            "org.springframework.security:spring-security-web:$springSecurityVersion",
             "org.aspectj:aspectjrt:1.6.8",
             "org.aspectj:aspectjweaver:1.6.8",
             "org.axonframework:axon-core:$axonVersion",
