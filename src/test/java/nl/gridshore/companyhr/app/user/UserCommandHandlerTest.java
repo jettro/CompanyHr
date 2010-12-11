@@ -24,8 +24,8 @@ public class UserCommandHandlerTest {
     @Test
     public void createNewUser() {
         fixture.given()
-                .when(new CreateUserCommand("12345678", "gridshore", "email@gridshore.nl"))
-                .expectEvents(new UserCreatedEvent("gridshore", "email@gridshore.nl"));
+                .when(new CreateUserCommand("12345678", "gridshore", "email@gridshore.nl",false))
+                .expectEvents(new UserCreatedEvent("gridshore", "email@gridshore.nl",false));
     }
 
 }

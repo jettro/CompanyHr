@@ -15,7 +15,8 @@ public class UserCommandHandler {
 
     @CommandHandler
     public void createNewUser(CreateUserCommand command) {
-        userRepository.add(new User(command.getUserName(), command.getEmail(), command.getDisplayname()));
+        userRepository.add(
+                new User(command.getUserName(), command.getEmail(), command.getDisplayname(),command.isAdministrator()));
     }
 
     @Autowired

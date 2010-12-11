@@ -25,7 +25,7 @@ import java.io.IOException;
  * @author Jettro Coenradie
  */
 public class GaeAuthenticationFilter extends GenericFilterBean {
-    private static final String REGISTRATION_URL = "/register.htm";
+    private static final String REGISTRATION_URL = "/register";
     private AuthenticationDetailsSource ads = new WebAuthenticationDetailsSource();
     private AuthenticationManager authenticationManager;
     private AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();

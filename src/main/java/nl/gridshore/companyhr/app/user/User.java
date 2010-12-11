@@ -14,9 +14,9 @@ public class User extends AbstractAnnotatedAggregateRoot {
         super(identifier);
     }
 
-    public User(String userName, String email, String displayName) {
+    public User(String userName, String email, String displayName, boolean administrator) {
         super(new StringAggregateIdentifier(userName));
-        apply(new UserCreatedEvent(displayName,email));
+        apply(new UserCreatedEvent(displayName,email,administrator));
     }
 
     @EventHandler

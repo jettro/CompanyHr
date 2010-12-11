@@ -18,12 +18,15 @@ public class UserEntry implements Serializable {
     private String displayName;
     private Set<AppRole> authorities;
 
-    public UserEntry(String userName, String displayName, String email) {
+    public UserEntry(String userName, String displayName, String email, boolean administrator) {
         this.userName = userName;
         this.email = email;
         this.displayName = displayName;
         authorities = new HashSet<AppRole>();
-        authorities.add(AppRole.USER);
+        authorities.add(AppRole.NEW_USER);
+        if (administrator) {
+            authorities.add(AppRole.ADMIN);
+        }
     }
 
     public UserEntry() {
@@ -64,5 +67,9 @@ public class UserEntry implements Serializable {
 
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean isAdministrator() {
+        return authorities.contains(AppRole.ADMIN);
     }
 }

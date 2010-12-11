@@ -1,6 +1,7 @@
 package nl.gridshore.companyhr.security;
 
 import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserServiceFactory;
 import nl.gridshore.companyhr.query.user.UserEntry;
 import nl.gridshore.companyhr.query.user.UserEntryProvider;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -22,7 +23,11 @@ public class GoogleAccountsAuthenticationProvider implements AuthenticationProvi
 
         if (user == null) {
             // User not in registry. Needs to register
-            user = new UserEntry(googleUser.getUserId(), googleUser.getNickname(), googleUser.getEmail());
+            boolean admin = false;
+            if (UserServiceFactory.getUserService().isUserAdmin()) {
+                admin = true;
+            }
+            user = new UserEntry(googleUser.getUserId(), googleUser.getNickname(), googleUser.getEmail(),admin);
         }
 
         if (!user.isEnabled()) {
