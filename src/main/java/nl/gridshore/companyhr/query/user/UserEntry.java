@@ -4,6 +4,7 @@ import nl.gridshore.companyhr.security.AppRole;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,10 +12,8 @@ import java.util.Set;
  * @author Jettro Coenradie
  */
 @Entity
-public class UserEntry {
-    private
-    @Id
-    String userName;
+public class UserEntry implements Serializable {
+    private @Id String userName;
     private String email;
     private String displayName;
     private Set<AppRole> authorities;

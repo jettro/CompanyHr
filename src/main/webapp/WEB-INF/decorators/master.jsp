@@ -1,3 +1,6 @@
+<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
+<%@ page import="org.springframework.security.core.Authentication" %>
+<%@ page import="nl.gridshore.companyhr.query.user.UserEntry" %>
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%--
@@ -51,7 +54,24 @@
 <body>
 <div id="header">
     <div id="primaryNavigation">
-        <span id="usermenu">Hello, &lt;user&gt;</span>
+        <span id="usermenu">
+<%
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null && auth.getPrincipal() instanceof UserEntry) {
+                String displayName = "";
+                try {
+                    displayName = ((UserEntry) auth.getPrincipal()).getDisplayName();
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                }
+%>
+
+               <%=  displayName %>
+            &nbsp;&nbsp;<a href="${ctx}/logout">logout</a>
+           <% } else { %>
+               &nbsp;&nbsp;<a href="${ctx}/login.jsp">login</a>
+           <% }%>
+        </span>
         <ul>
             <li class="home"><a href="${ctx}/"><span>Home</span></a></li>
             <li class="project"><a href="${ctx}/project"><span>Project</span></a></li>
