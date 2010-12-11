@@ -7,8 +7,6 @@
         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <b:import resource="applicationContext-axon.xml"/>
-
     <context:component-scan base-package="nl.gridshore.companyhr.app,nl.gridshore.companyhr.axongeahacks,nl.gridshore.companyhr.query,nl.gridshore.companyhr.security"/>
 
     <http use-expressions="true" entry-point-ref="gaeEntryPoint">

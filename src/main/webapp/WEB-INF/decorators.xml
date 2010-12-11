@@ -16,6 +16,9 @@
   -->
 
 <decorators defaultdir="/WEB-INF/decorators">
+    <excludes>
+        <pattern>/_ah/*</pattern>
+    </excludes>
     <decorator name="master" page="master.jsp">
         <pattern>/*</pattern>
     </decorator>
