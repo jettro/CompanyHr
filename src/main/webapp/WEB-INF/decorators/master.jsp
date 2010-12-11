@@ -69,7 +69,7 @@
                <%=  displayName %>
             &nbsp;&nbsp;<a href="${ctx}/logout">logout</a>
            <% } else { %>
-               &nbsp;&nbsp;<a href="${ctx}/login.jsp">login</a>
+               &nbsp;&nbsp;<a href="${ctx}/login">login</a>
            <% }%>
         </span>
         <ul>

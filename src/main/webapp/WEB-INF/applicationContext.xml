@@ -15,6 +15,7 @@
         <intercept-url pattern="/" access="permitAll" />
         <intercept-url pattern="/logout" access="permitAll" />
         <intercept-url pattern="/project/**" access="hasRole('USER')"/>
+        <intercept-url pattern="/login/**" access="hasRole('USER')"/>
         <custom-filter position="PRE_AUTH_FILTER" ref="gaeFilter" />
     </http>
 

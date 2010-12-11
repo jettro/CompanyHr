@@ -14,6 +14,7 @@
 
     <mvc:view-controller path="/index.html" view-name="index"/>
     <mvc:view-controller path="/" view-name="index"/>
+    <mvc:view-controller path="/login" view-name="index"/>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/"/>
