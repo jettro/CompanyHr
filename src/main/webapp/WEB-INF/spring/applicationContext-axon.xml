@@ -9,14 +9,22 @@
     <axon:annotation-config/>
     <axon:event-bus id="eventBus" register-mbeans="false"/>
     <axon:command-bus id="commandBus" register-mbeans="false"/>
-    <axon:event-sourcing-repository id="projectRepository" aggregate-type="nl.gridshore.companyhr.app.project.Project"/>
-    <axon:event-sourcing-repository id="userRepository" aggregate-type="nl.gridshore.companyhr.app.user.User"/>
+
+    <axon:event-sourcing-repository id="projectRepository" aggregate-type="nl.gridshore.companyhr.app.project.Project">
+        <axon:snapshotter-trigger event-count-threshold="5" snapshotter-ref="snapshotter"/>
+    </axon:event-sourcing-repository>
+
+    <axon:event-sourcing-repository id="userRepository" aggregate-type="nl.gridshore.companyhr.app.user.User">
+        <axon:snapshotter-trigger event-count-threshold="5" snapshotter-ref="snapshotter"/>
+    </axon:event-sourcing-repository>
 
     <bean id="eventStore" class="nl.gridshore.companyhr.app.axon.GaeEventStore">
         <constructor-arg index="0" ref="gaeXStreamSerializer"/>
     </bean>
 
     <bean name="gaeXStreamSerializer" class="nl.gridshore.companyhr.axongeahacks.GaeXStreamEventSerializer"/>
+
+    <bean id="snapshotter" class="nl.gridshore.companyhr.app.axon.GaeSnapshotter"/>
 
     <!-- Objectify -->
     <bean id="objectifyFactoryFactory" class="nl.gridshore.companyhr.query.ObjectifyFactoryFactory">
