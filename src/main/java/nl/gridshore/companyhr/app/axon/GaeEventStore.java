@@ -5,17 +5,21 @@ import org.axonframework.domain.AggregateIdentifier;
 import org.axonframework.domain.DomainEvent;
 import org.axonframework.domain.DomainEventStream;
 import org.axonframework.domain.SimpleDomainEventStream;
-import org.axonframework.eventstore.*;
+import org.axonframework.eventstore.EventSerializer;
+import org.axonframework.eventstore.EventStreamNotFoundException;
+import org.axonframework.eventstore.SnapshotEventStore;
+import org.axonframework.eventstore.XStreamEventSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * @author Jettro Coenradie
  */
-public class GaeEventStore implements SnapshotEventStore, EventStoreManagement {
+public class GaeEventStore implements SnapshotEventStore {
     private static final Logger logger = LoggerFactory.getLogger(GaeEventStore.class);
     private static final int EVENT_VISITOR_BATCH_SIZE = 50;
 
@@ -32,23 +36,21 @@ public class GaeEventStore implements SnapshotEventStore, EventStoreManagement {
     }
 
     public void appendEvents(String type, DomainEventStream events) {
-        List<Entity> entries = new ArrayList<Entity>();
         while (events.hasNext()) {
             DomainEvent event = events.next();
             EventEntry entry = new EventEntry(type, event, eventSerializer);
-            entries.add(entry.asEntity());
-        }
-        Transaction transaction = datastoreService.beginTransaction();
-        try {
-            datastoreService.put(transaction, entries);
-            transaction.commit();
-        } finally {
-            if (transaction.isActive()) {
-                logger.info("Transaction to commit new events is rolled back because");
-                transaction.rollback();
-            } else {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("{} events of type {} appended", new Object[]{entries.size(), type});
+            Transaction transaction = datastoreService.beginTransaction();
+            try {
+                datastoreService.put(transaction, entry.asEntity());
+                transaction.commit();
+            } finally {
+                if (transaction.isActive()) {
+                    logger.info("Transaction to commit new events is rolled back because");
+                    transaction.rollback();
+                } else {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("event of type {} appended", type);
+                    }
                 }
             }
         }
@@ -73,22 +75,24 @@ public class GaeEventStore implements SnapshotEventStore, EventStoreManagement {
         return new SimpleDomainEventStream(events);
     }
 
-    public void visitEvents(EventVisitor visitor) {
-        int first = 0;
-        List<EventEntry> batch;
-        boolean shouldContinue = true;
-        while (shouldContinue) {
-            batch = fetchBatch(first, EVENT_VISITOR_BATCH_SIZE);
-            for (EventEntry entry : batch) {
-                visitor.doWithEvent(entry.getDomainEvent(eventSerializer));
-            }
-            shouldContinue = (batch.size() >= EVENT_VISITOR_BATCH_SIZE);
-            first += EVENT_VISITOR_BATCH_SIZE;
-        }
-    }
+//    TODO discuss with Allard
+//    public void visitEvents(EventVisitor visitor) {
+//        int first = 0;
+//        List<EventEntry> batch;
+//        boolean shouldContinue = true;
+//        while (shouldContinue) {
+//            batch = fetchBatch(first, EVENT_VISITOR_BATCH_SIZE);
+//            for (EventEntry entry : batch) {
+//                visitor.doWithEvent(entry.getDomainEvent(eventSerializer));
+//            }
+//            shouldContinue = (batch.size() >= EVENT_VISITOR_BATCH_SIZE);
+//            first += EVENT_VISITOR_BATCH_SIZE;
+//        }
+//    }
 
     public void appendSnapshotEvent(String type, DomainEvent snapshotEvent) {
-        EventEntry snapshotEventEntry = new EventEntry(type, snapshotEvent, eventSerializer);
+        String snapshotType = "snapshot_" + type;
+        EventEntry snapshotEventEntry = new EventEntry(snapshotType, snapshotEvent, eventSerializer);
         Transaction transaction = datastoreService.beginTransaction();
 
         try {
@@ -108,7 +112,7 @@ public class GaeEventStore implements SnapshotEventStore, EventStoreManagement {
 
     private List<DomainEvent> readEventSegmentInternal(String type, AggregateIdentifier identifier,
                                                        long firstSequenceNumber) {
-        Query query = EventEntry.forAggregate(type,identifier.asString(),firstSequenceNumber);
+        Query query = EventEntry.forAggregate(type, identifier.asString(), firstSequenceNumber);
         PreparedQuery preparedQuery = datastoreService.prepare(query);
         List<Entity> entities = preparedQuery.asList(FetchOptions.Builder.withDefaults());
 
@@ -121,11 +125,18 @@ public class GaeEventStore implements SnapshotEventStore, EventStoreManagement {
     }
 
     private EventEntry loadLastSnapshotEvent(String type, AggregateIdentifier identifier) {
-        return null; // TODO implement
+        Query query = EventEntry.forLastSnapshot("snapshot_" + type, identifier.asString());
+        PreparedQuery preparedQuery = datastoreService.prepare(query);
+        Iterator<Entity> entityIterator = preparedQuery.asIterable().iterator();
+        if (entityIterator.hasNext()) {
+            Entity lastSnapshot = entityIterator.next();
+            return new EventEntry(lastSnapshot);
+        }
+        return null;
     }
 
     private List<EventEntry> fetchBatch(int startPosition, int batchSize) {
-        return null; // TODO implement
+        return null;
     }
 
 }

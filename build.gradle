@@ -25,8 +25,8 @@ repositories {
     flatDir(dirs: "$gaeHome/lib/")
     mavenCentral()
     mavenRepo urls: ["file://" + System.getProperty('user.home') + "/.m2/repository/",
-                     "http://oss.sonatype.org/content/groups/public",
-                     "http://objectify-appengine.googlecode.com/svn/maven"]
+            "http://oss.sonatype.org/content/groups/public",
+            "http://objectify-appengine.googlecode.com/svn/maven"]
 }
 
 dependencies {
@@ -64,7 +64,6 @@ dependencies {
         exclude group: "javax.jms", module: "jms"
     }
 
-
     // from lib folder
     compile ":user/appengine-api-1.0-sdk:$gaeVersion",
             ":user/appengine-api-labs:$gaeVersion"
@@ -73,8 +72,10 @@ dependencies {
     providedCompile "javax.servlet:servlet-api:2.5"
 
     // testing
-    testCompile "junit:junit:4.8.1"
-    testCompile "org.axonframework:axon-test:$axonVersion"
+    testCompile "junit:junit:4.8.1",
+            "org.axonframework:axon-test:$axonVersion",
+            ":impl/appengine-api-stubs",
+            ":testing/appengine-testing"
 
 }
 

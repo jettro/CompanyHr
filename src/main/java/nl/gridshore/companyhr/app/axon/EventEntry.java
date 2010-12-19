@@ -40,6 +40,15 @@ public class EventEntry {
         this.timeStamp = event.getTimestamp().toString();
     }
 
+    EventEntry(Entity entity) {
+        this.eventIdentifier = entity.getKey().getName();
+        this.aggregateType = entity.getKey().getName();
+        this.aggregateIdentifier = (String) entity.getProperty("aggregateIdentifier");
+        this.sequenceNumber = (Long) entity.getProperty("sequenceNumber");
+        this.serializedEvent = ((Text) entity.getProperty("serializedEvent")).getValue();
+        this.timeStamp = (String) entity.getProperty("timeStamp");
+    }
+
     /**
      * Returns the actual DomainEvent from the EventEntry using the provided EventSerializer
      *
@@ -107,4 +116,11 @@ public class EventEntry {
                 .addSort("sequenceNumber", Query.SortDirection.ASCENDING);
 
     }
+
+    static Query forLastSnapshot(String type, String aggregateIdentifier) {
+        return new Query(type)
+                .addFilter("aggregateIdentifier", Query.FilterOperator.EQUAL, aggregateIdentifier)
+                .addSort("sequenceNumber", Query.SortDirection.ASCENDING);
+    }
+
 }
