@@ -4,4 +4,16 @@
         <property name="aggregateIdentifier" direction="asc"/>
         <property name="sequenceNumber" direction="asc"/>
     </datastore-index>
+    <datastore-index kind="User" ancestor="false" source="manual">
+        <property name="aggregateIdentifier" direction="asc"/>
+        <property name="sequenceNumber" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="snapshot_Project" ancestor="false" source="manual">
+        <property name="aggregateIdentifier" direction="asc"/>
+        <property name="sequenceNumber" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="snapshot_User" ancestor="false" source="manual">
+        <property name="aggregateIdentifier" direction="asc"/>
+        <property name="sequenceNumber" direction="asc"/>
+    </datastore-index>
 </datastore-indexes>
