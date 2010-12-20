@@ -15,12 +15,12 @@ import com.thoughtworks.xstream.mapper.Mapper;
  * @author Jettro Coenradie
  */
 public class GaeXStream extends XStream {
-    private ClassLoaderReference classLoaderReference;
+//    private ClassLoaderReference classLoaderReference;
 
     public GaeXStream(PureJavaReflectionProvider pureJavaReflectionProvider, XppDriver xppDriver,
                       ClassLoaderReference classLoaderReference) {
         super(pureJavaReflectionProvider, xppDriver, classLoaderReference);
-        this.classLoaderReference = classLoaderReference;
+//        this.classLoaderReference = classLoaderReference;
     }
 
 
@@ -64,9 +64,9 @@ public class GaeXStream extends XStream {
 
         registerConverter(new FileConverter(), PRIORITY_NORMAL);
 
-        registerConverter(new DynamicProxyConverter(mapper, classLoaderReference), PRIORITY_NORMAL);
-        registerConverter(new JavaClassConverter(classLoaderReference), PRIORITY_NORMAL);
-        registerConverter(new JavaMethodConverter(classLoaderReference), PRIORITY_NORMAL);
+        registerConverter(new DynamicProxyConverter(mapper, getClassLoader()), PRIORITY_NORMAL);
+        registerConverter(new JavaClassConverter(getClassLoader()), PRIORITY_NORMAL);
+        registerConverter(new JavaMethodConverter(getClassLoader()), PRIORITY_NORMAL);
         registerConverter(new LocaleConverter(), PRIORITY_NORMAL);
         registerConverter(new GregorianCalendarConverter(), PRIORITY_NORMAL);
 

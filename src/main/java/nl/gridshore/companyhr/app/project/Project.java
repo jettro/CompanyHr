@@ -6,10 +6,12 @@ import org.axonframework.domain.AggregateIdentifier;
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
 
+import java.io.Serializable;
+
 /**
  * @author Jettro Coenradie
  */
-public class Project extends AbstractAnnotatedAggregateRoot {
+public class Project extends AbstractAnnotatedAggregateRoot implements Serializable {
 
     public Project(AggregateIdentifier identifier) {
         super(identifier);
