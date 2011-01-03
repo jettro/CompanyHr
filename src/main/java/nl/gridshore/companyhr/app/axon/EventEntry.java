@@ -115,7 +115,6 @@ public class EventEntry {
      * @param firstSequenceNumber number representing the first event to obtain
      * @return Created DBObject based on the provided parameters to be used for a query
      */
-
     static Query forAggregate(String type, String aggregateIdentifier, long firstSequenceNumber) {
         return new Query(type)
                 .addFilter(AGGREGATE_IDENTIFIER, Query.FilterOperator.EQUAL, aggregateIdentifier)
