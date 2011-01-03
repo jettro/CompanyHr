@@ -15,12 +15,10 @@ import com.thoughtworks.xstream.mapper.Mapper;
  * @author Jettro Coenradie
  */
 public class GaeXStream extends XStream {
-//    private ClassLoaderReference classLoaderReference;
 
     public GaeXStream(PureJavaReflectionProvider pureJavaReflectionProvider, XppDriver xppDriver,
                       ClassLoaderReference classLoaderReference) {
         super(pureJavaReflectionProvider, xppDriver, classLoaderReference);
-//        this.classLoaderReference = classLoaderReference;
     }
 
 
