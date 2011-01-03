@@ -1,4 +1,3 @@
-// https://github.com/pniederw/spockwebconsole
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'war'
@@ -26,7 +25,7 @@ repositories {
     flatDir(dirs: "$gaeHome/lib/")
     mavenCentral()
     mavenRepo urls: [
-//            "http://oss.sonatype.org/content/groups/public",
+            "http://oss.sonatype.org/content/groups/public",
             "http://objectify-appengine.googlecode.com/svn/maven"]
 }
 
@@ -84,25 +83,3 @@ war.doLast {
     // create exploded WAR directory
     ant.unzip src: war.archivePath, dest: explodedWar
 }
-
-task jettyStart(description: "Starts the development application server") << {
-    exec "dev_appserver.sh $explodedWar.absolutePath"
-}
-
-task jettyStop(description: "Stops the development application server") << {
-    // for some reason, exec'ing this has no effect (although there's no error message)
-    println '''
-Run the following command:
-ps ww -o pid,command | awk '/com.google.appengine.tools.development.DevAppServerMain/ && !/awk/ {system("kill " $1);}'
-  '''
-}
-
-task deploy(dependsOn: war, description: "Deploys application to Google App Engine") << {
-    exec "appcfg.sh update $explodedWar.absolutePath"
-}
-
-def exec(command) {
-    println "Executing: $command"
-    def proc = command.execute()
-}
-
