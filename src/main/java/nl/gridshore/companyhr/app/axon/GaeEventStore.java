@@ -38,21 +38,7 @@ public class GaeEventStore implements SnapshotEventStore {
     public void appendEvents(String type, DomainEventStream events) {
         while (events.hasNext()) {
             DomainEvent event = events.next();
-            EventEntry entry = new EventEntry(type, event, eventSerializer);
-            Transaction transaction = datastoreService.beginTransaction();
-            try {
-                datastoreService.put(transaction, entry.asEntity());
-                transaction.commit();
-            } finally {
-                if (transaction.isActive()) {
-                    logger.info("Transaction to commit new events is rolled back because");
-                    transaction.rollback();
-                } else {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("event of type {} appended", type);
-                    }
-                }
-            }
+            doStoreEvent(type, event);
         }
     }
 
@@ -92,11 +78,14 @@ public class GaeEventStore implements SnapshotEventStore {
 
     public void appendSnapshotEvent(String type, DomainEvent snapshotEvent) {
         String snapshotType = "snapshot_" + type;
-        EventEntry snapshotEventEntry = new EventEntry(snapshotType, snapshotEvent, eventSerializer);
-        Transaction transaction = datastoreService.beginTransaction();
+        doStoreEvent(snapshotType, snapshotEvent);
+    }
 
+    private void doStoreEvent(String type, DomainEvent event) {
+        EventEntry entry = new EventEntry(type, event, eventSerializer);
+        Transaction transaction = datastoreService.beginTransaction();
         try {
-            datastoreService.put(transaction, snapshotEventEntry.asEntity());
+            datastoreService.put(transaction, entry.asEntity());
             transaction.commit();
         } finally {
             if (transaction.isActive()) {
@@ -104,7 +93,7 @@ public class GaeEventStore implements SnapshotEventStore {
                 transaction.rollback();
             } else {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("1 snapshot event of type {} appended", type);
+                    logger.debug("event of type {} appended", type);
                 }
             }
         }
