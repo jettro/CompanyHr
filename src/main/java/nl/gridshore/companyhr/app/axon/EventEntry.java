@@ -9,9 +9,16 @@ import org.axonframework.eventstore.EventSerializer;
 import java.nio.charset.Charset;
 
 /**
+ * <p>Class that represents an event to store in the google app engine data store. </p>
+ *
  * @author Jettro Coenradie
  */
 public class EventEntry {
+    private static final String AGGREGATE_IDENTIFIER = "aggregateIdentifier";
+    private static final String SEQUENCE_NUMBER = "sequenceNumber";
+    private static final String SERIALIZED_EVENT = "serializedEvent";
+    private static final String TIME_STAMP = "timeStamp";
+
     private String eventIdentifier;
     private String aggregateIdentifier;
     private long sequenceNumber;
@@ -43,10 +50,10 @@ public class EventEntry {
     EventEntry(Entity entity) {
         this.eventIdentifier = entity.getKey().getName();
         this.aggregateType = entity.getKey().getName();
-        this.aggregateIdentifier = (String) entity.getProperty("aggregateIdentifier");
-        this.sequenceNumber = (Long) entity.getProperty("sequenceNumber");
-        this.serializedEvent = ((Text) entity.getProperty("serializedEvent")).getValue();
-        this.timeStamp = (String) entity.getProperty("timeStamp");
+        this.aggregateIdentifier = (String) entity.getProperty(AGGREGATE_IDENTIFIER);
+        this.sequenceNumber = (Long) entity.getProperty(SEQUENCE_NUMBER);
+        this.serializedEvent = ((Text) entity.getProperty(SERIALIZED_EVENT)).getValue();
+        this.timeStamp = (String) entity.getProperty(TIME_STAMP);
     }
 
     /**
@@ -92,10 +99,10 @@ public class EventEntry {
     Entity asEntity() {
         Key key = KeyFactory.createKey(aggregateType, eventIdentifier);
         Entity entity = new Entity(key);
-        entity.setProperty("aggregateIdentifier", aggregateIdentifier);
-        entity.setProperty("sequenceNumber", sequenceNumber);
-        entity.setProperty("timeStamp", timeStamp);
-        entity.setProperty("serializedEvent", new Text(serializedEvent));
+        entity.setProperty(AGGREGATE_IDENTIFIER, aggregateIdentifier);
+        entity.setProperty(SEQUENCE_NUMBER, sequenceNumber);
+        entity.setProperty(TIME_STAMP, timeStamp);
+        entity.setProperty(SERIALIZED_EVENT, new Text(serializedEvent));
 
         return entity;
     }
@@ -111,16 +118,16 @@ public class EventEntry {
 
     static Query forAggregate(String type, String aggregateIdentifier, long firstSequenceNumber) {
         return new Query(type)
-                .addFilter("aggregateIdentifier", Query.FilterOperator.EQUAL, aggregateIdentifier)
-                .addFilter("sequenceNumber", Query.FilterOperator.GREATER_THAN_OR_EQUAL, firstSequenceNumber)
-                .addSort("sequenceNumber", Query.SortDirection.ASCENDING);
+                .addFilter(AGGREGATE_IDENTIFIER, Query.FilterOperator.EQUAL, aggregateIdentifier)
+                .addFilter(SEQUENCE_NUMBER, Query.FilterOperator.GREATER_THAN_OR_EQUAL, firstSequenceNumber)
+                .addSort(SEQUENCE_NUMBER, Query.SortDirection.ASCENDING);
 
     }
 
     static Query forLastSnapshot(String type, String aggregateIdentifier) {
         return new Query(type)
-                .addFilter("aggregateIdentifier", Query.FilterOperator.EQUAL, aggregateIdentifier)
-                .addSort("sequenceNumber", Query.SortDirection.ASCENDING);
+                .addFilter(AGGREGATE_IDENTIFIER, Query.FilterOperator.EQUAL, aggregateIdentifier)
+                .addSort(SEQUENCE_NUMBER, Query.SortDirection.ASCENDING);
     }
 
 }
