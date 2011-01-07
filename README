@@ -1,0 +1,4 @@
+Google app engine commands:
+dev_appserver.sh build/exploded/
+
+appcfg.sh update /Users/jcoenradie/Sources/CompanyHr/build/exploded

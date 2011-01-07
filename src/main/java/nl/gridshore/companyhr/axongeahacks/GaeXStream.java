@@ -29,7 +29,7 @@ public class GaeXStream extends XStream {
 
         final ReflectionConverter reflectionConverter =
                 new ReflectionConverter(mapper, reflectionProvider);
-        registerConverter(reflectionConverter, PRIORITY_VERY_LOW);
+        registerConverter(reflectionConverter, PRIORITY_LOW);
 
         registerConverter(new SerializableConverter(mapper, reflectionProvider), PRIORITY_LOW);
         registerConverter(new ExternalizableConverter(mapper), PRIORITY_LOW);

@@ -11,8 +11,8 @@ targetCompatibility = 1.6
 gaeVersion = "1.4.0"
 springVersion = "3.0.5.RELEASE"
 springSecurityVersion = "3.0.5.RELEASE"
-axonVersion = "0.7-SNAPSHOT"
-slf4jVersion = "1.5.8"
+axonVersion = "0.8-SNAPSHOT"
+slf4jVersion = "1.6.1"
 
 def explodedWar = file("$buildDir/exploded")
 
@@ -25,7 +25,7 @@ repositories {
     flatDir(dirs: "$gaeHome/lib/")
     mavenCentral()
     mavenRepo urls: [
-            "http://oss.sonatype.org/content/groups/public",
+//            "http://oss.sonatype.org/content/groups/public",
             "http://objectify-appengine.googlecode.com/svn/maven"]
 }
 
@@ -54,6 +54,7 @@ dependencies {
 
     // logging
     compile "org.slf4j:jcl-over-slf4j:$slf4jVersion",
+            "org.slf4j:slf4j-api:$slf4jVersion",
             "org.slf4j:jul-to-slf4j:$slf4jVersion"
     runtime "org.slf4j:slf4j-log4j12:$slf4jVersion"
 

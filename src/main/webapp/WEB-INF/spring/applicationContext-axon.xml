@@ -19,10 +19,14 @@
     </axon:event-sourcing-repository>
 
     <bean id="eventStore" class="nl.gridshore.companyhr.app.axon.GaeEventStore">
-        <constructor-arg index="0" ref="gaeXStreamSerializer"/>
+        <constructor-arg index="0" ref="xStreamEventSerializer"/>
     </bean>
 
-    <bean name="gaeXStreamSerializer" class="nl.gridshore.companyhr.axongeahacks.GaeXStreamEventSerializer"/>
+    <bean name="xStreamEventSerializer" class="org.axonframework.eventstore.XStreamEventSerializer">
+        <constructor-arg index="0" type="com.thoughtworks.xstream.XStream" ref="xStream"/>
+    </bean>
+
+    <bean id="xStream" class="nl.gridshore.companyhr.axongeahacks.XStreamFactory"/>
 
     <bean id="snapshotter" class="nl.gridshore.companyhr.app.axon.GaeSnapshotter"/>
 
