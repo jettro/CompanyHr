@@ -5,8 +5,8 @@ apply plugin: 'war'
 group = "nl.gridshore.companyhr"
 version = "0.1-SNAPSHOT"
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
+sourceCompatibility = 6
+targetCompatibility = 6
 
 gaeVersion = "1.4.0"
 springVersion = "3.0.5.RELEASE"
@@ -25,7 +25,7 @@ repositories {
     flatDir(dirs: "$gaeHome/lib/")
     mavenCentral()
     mavenRepo urls: [
-//            "http://oss.sonatype.org/content/groups/public",
+            "http://oss.sonatype.org/content/groups/public",
             "http://objectify-appengine.googlecode.com/svn/maven"]
 }
 
