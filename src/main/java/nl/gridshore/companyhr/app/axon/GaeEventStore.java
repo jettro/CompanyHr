@@ -21,7 +21,6 @@ import java.util.List;
  */
 public class GaeEventStore implements SnapshotEventStore {
     private static final Logger logger = LoggerFactory.getLogger(GaeEventStore.class);
-    private static final int EVENT_VISITOR_BATCH_SIZE = 50;
 
     private final EventSerializer eventSerializer;
     private final DatastoreService datastoreService;
@@ -60,21 +59,6 @@ public class GaeEventStore implements SnapshotEventStore {
 
         return new SimpleDomainEventStream(events);
     }
-
-//    TODO discuss with Allard
-//    public void visitEvents(EventVisitor visitor) {
-//        int first = 0;
-//        List<EventEntry> batch;
-//        boolean shouldContinue = true;
-//        while (shouldContinue) {
-//            batch = fetchBatch(first, EVENT_VISITOR_BATCH_SIZE);
-//            for (EventEntry entry : batch) {
-//                visitor.doWithEvent(entry.getDomainEvent(eventSerializer));
-//            }
-//            shouldContinue = (batch.size() >= EVENT_VISITOR_BATCH_SIZE);
-//            first += EVENT_VISITOR_BATCH_SIZE;
-//        }
-//    }
 
     public void appendSnapshotEvent(String type, DomainEvent snapshotEvent) {
         String snapshotType = "snapshot_" + type;
@@ -121,10 +105,6 @@ public class GaeEventStore implements SnapshotEventStore {
             Entity lastSnapshot = entityIterator.next();
             return new EventEntry(lastSnapshot);
         }
-        return null;
-    }
-
-    private List<EventEntry> fetchBatch(int startPosition, int batchSize) {
         return null;
     }
 

@@ -111,17 +111,6 @@ public class GaeEventStoreTest {
         eventStore.readEvents("test", new UUIDAggregateIdentifier());
     }
 
-//    TODO: first need to finish the implementation
-//    @Test
-//    public void testDoWithAllEvents() {
-//        EventVisitor eventVisitor = mock(EventVisitor.class);
-//        eventStore.appendEvents("type1", new SimpleDomainEventStream(createDomainEvents(77)));
-//        eventStore.appendEvents("type2", new SimpleDomainEventStream(createDomainEvents(23)));
-//
-//        eventStore.visitEvents(eventVisitor);
-//        verify(eventVisitor, times(100)).doWithEvent(isA(DomainEvent.class));
-//    }
-
     private Query createCountQuery(String type) {
         return new Query(type);
     }
