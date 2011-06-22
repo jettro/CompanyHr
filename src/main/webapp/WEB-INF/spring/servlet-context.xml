@@ -12,7 +12,7 @@
 
     <mvc:annotation-driven/>
 
-    <mvc:resources mapping="/favicon.ico" location="/13-favicon.ico"/>
+    <mvc:resources mapping="/favicon.ico" location="/"/>
 
     <mvc:view-controller path="/index.html" view-name="index"/>
     <mvc:view-controller path="/" view-name="index"/>
