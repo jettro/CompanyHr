@@ -7,15 +7,16 @@
         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:component-scan base-package="nl.gridshore.companyhr.app,nl.gridshore.companyhr.axongeahacks,nl.gridshore.companyhr.query,nl.gridshore.companyhr.security"/>
+    <context:component-scan
+            base-package="nl.gridshore.companyhr.app,nl.gridshore.companyhr.query,nl.gridshore.companyhr.security"/>
 
     <http use-expressions="true" entry-point-ref="gaeEntryPoint">
-        <intercept-url pattern="/" access="permitAll" />
-        <intercept-url pattern="/logout" access="permitAll" />
+        <intercept-url pattern="/" access="permitAll"/>
+        <intercept-url pattern="/logout" access="permitAll"/>
         <intercept-url pattern="/register/**" access="hasRole('NEW_USER')"/>
         <intercept-url pattern="/project/**" access="hasRole('USER')"/>
         <intercept-url pattern="/login/**" access="hasRole('USER')"/>
-        <custom-filter position="PRE_AUTH_FILTER" ref="gaeFilter" />
+        <custom-filter position="PRE_AUTH_FILTER" ref="gaeFilter"/>
     </http>
 
     <b:bean id="gaeEntryPoint" class="nl.gridshore.companyhr.security.GoogleAccountsAuthenticationEntryPoint"/>

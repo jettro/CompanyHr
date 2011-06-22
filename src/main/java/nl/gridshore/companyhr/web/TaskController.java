@@ -1,6 +1,6 @@
 package nl.gridshore.companyhr.web;
 
-import nl.gridshore.companyhr.app.axon.GaeSnapshotter;
+import org.axonframework.eventstore.gae.GaeSnapshotter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -18,7 +18,7 @@
         <axon:snapshotter-trigger event-count-threshold="5" snapshotter-ref="snapshotter"/>
     </axon:event-sourcing-repository>
 
-    <bean id="eventStore" class="nl.gridshore.companyhr.app.axon.GaeEventStore">
+    <bean id="eventStore" class="org.axonframework.eventstore.gae.GaeEventStore">
         <constructor-arg index="0" ref="xStreamEventSerializer"/>
     </bean>
 
@@ -26,9 +26,9 @@
         <constructor-arg index="0" type="com.thoughtworks.xstream.XStream" ref="xStream"/>
     </bean>
 
-    <bean id="xStream" class="nl.gridshore.companyhr.axongeahacks.XStreamFactory"/>
+    <bean id="xStream" class="org.axonframework.serializer.gae.XStreamFactory"/>
 
-    <bean id="snapshotter" class="nl.gridshore.companyhr.app.axon.GaeSnapshotter"/>
+    <bean id="snapshotter" class="org.axonframework.eventstore.gae.GaeSnapshotter"/>
 
     <!-- Objectify -->
     <bean id="objectifyFactoryFactory" class="nl.gridshore.companyhr.query.ObjectifyFactoryFactory">
